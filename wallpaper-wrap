@@ -1,0 +1,54 @@
+#!/bin/bash
+
+declare -A wallpaperPaths=(
+    ["chusyajo"]="/home/aya1379/Downloads/wallpapers/wallpaper.gif"
+    ["tabako"]="/home/aya1379/Downloads/wallpapers/motocross-art/tabako.gif"
+    ["darkroom"]="/mnt/hdd/Downloads/darkroom.mp4"
+    ["ecorp"]="/mnt/hdd/Downloads/ecorp.mp4"
+    ["moonlight"]="/mnt/hdd/Downloads/Moonlight.mp4"
+    ["terraria1"]="/mnt/hdd/Downloads/terrariaday.mp4"
+    ["terraria2"]="/mnt/hdd/Downloads/terraria_night.mp4"
+    ["chris"]="/mnt/hdd/SteamLibrary/steamapps/workshop/content/431960/1372127739/Composizione.mp4"
+    ["china"]="/mnt/hdd/SteamLibrary/steamapps/workshop/content/431960/841092530/china.mp4"
+    ["rain"]="/mnt/hdd/SteamLibrary/steamapps/workshop/content/431960/1212260969/rainfall.mp4"
+    ["doggo"]="/mnt/hdd/SteamLibrary/steamapps/workshop/content/431960/1661383396/EP03.mp4"
+    ["mumbo"]="/mnt/hdd/SteamLibrary/steamapps/workshop/content/431960/1403625644/Dune.mp4"
+    ["firewatch"]="/mnt/hdd/SteamLibrary/steamapps/workshop/content/431960/951259031/firewatch.mp4"
+)
+
+
+if [ "$1" = "-l" ]; then 
+    echo "All Options: "
+fi
+
+#ReturnWallpaper(){
+for option in "${!wallpaperPaths[@]}"; do
+    if [ "$1" = "$option" ]; then
+        wallpaper_passed=true
+        active_Wallpaper="${wallpaperPaths[$option]}"
+    elif [ "$1" = "-l" ]; then
+        echo "$option"
+    elif [ "$1" = "-d" ]; then
+        killall -9 xwinwrap
+        killall -9 mpv
+    fi
+
+    if [ "$2" = "$option" ]; then
+        active_Wallpaper2="${wallpaperPaths[$option]}"
+    fi
+done
+
+#use this wallpaper
+default_Wallpaper=${wallpaperPaths[chusyajo]};
+
+if [ $# -eq 0 ] ; then
+    xwinwrap -g 1920x1080+0+0 -un -fdt -ni -b -nf  -- $HOME/.local/bin/wallpaper-live WID $default_Wallpaper &
+else
+    if [ -n "$1" ] && [ "$wallpaper_passed" = true ] ; then # if first parameter is passed
+        xwinwrap -g 1920x1080+0+0 -un -fdt -ni -b -nf -- $HOME/.local/bin/wallpaper-live WID $active_Wallpaper &i
+    fi
+    if [ -n "$2" ] ; then
+        xwinwrap -g 1920x1080+1920+0 -un -fdt -ni -b -nf -- $HOME/.local/bin/wallpaper-live WID $active_Wallpaper2 &
+#-ov option after -nf to disable 
+    fi
+fi
